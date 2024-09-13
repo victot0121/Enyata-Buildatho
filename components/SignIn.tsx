@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import googleLogo from '@/assets/googleLogo.svg';
-import { Switch } from "@/components/ui/switch";
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 const SignIn = () => {
@@ -134,7 +133,6 @@ const SignIn = () => {
 
                         <div className='mt-[50px] flex w-full justify-between items-center px-8'>
                             <div className='flex items-center'>
-                                <Switch />
                                 <span className='ml-2'>Remember me</span>
                             </div>
                             <div className='text-red-400 cursor-pointer'>

@@ -14,13 +14,6 @@ declare type User = {
   dateOfBirth: string;
   ssn: string;
 };
-
-
-declare interface RightSidebarProps {
-    user: User;
-    transactions: Transaction[];
-    banks: Bank[] & Account[];
-  }
   
   
   declare interface SiderbarProps {
@@ -40,8 +33,3 @@ declare interface RightSidebarProps {
      back: string,
      signInButton: string,
   }
-
-    declare interface FooterProps {
-        user: User;
-        type?: 'mobile' | 'desktop'
-      }
