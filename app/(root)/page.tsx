@@ -105,7 +105,7 @@ const SignIn = () => {
                     </div>
                 </div>
 
-                <div className='h-[600px] w-[400px] border mx-auto mt-9 customtwo rounded'>
+                <div className='h-[500px] w-[400px] border mx-auto mt-9 customtwo rounded'>
                     <form onSubmit={handleSubmit} className="w-full h-full">
                         <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="firstName" className='mb-2'>
