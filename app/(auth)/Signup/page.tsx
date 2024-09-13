@@ -142,7 +142,7 @@ const Signup = () => {
                             />
                             {errors.email && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.email}</p>}
                         </div>
-                        <div className='w-[300px] h-[40px] mt-12 mx-auto flex flex-col relative'>
+                        <div className='w-[300px] h-[40px] mt-12 mb-12 mx-auto flex flex-col relative'>
                             <label htmlFor="password" className='mb-2'>
                                 Password
                             </label>
@@ -155,7 +155,7 @@ const Signup = () => {
                                 onChange={handleInputChange}
                             />
                             {/* Toggle password visibility icon */}
-                            <div className=''>
+                            <div className='mb-9'>
                                 {showPassword ? (
                                     <HiOutlineEyeOff
                                         className='absolute right-2 top-10 cursor-pointer'
@@ -177,7 +177,7 @@ const Signup = () => {
 
                         <div className='mt-4 flex justify-center'>
                             <p>Already have an account?</p>
-                            <Link href="/auth/signin" className="text-blue-500 ml-1">Sign In</Link>
+                            <Link href="/" className="text-blue-500 ml-1">Sign In</Link>
                         </div>
                     </form>
                 </div>

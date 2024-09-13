@@ -1,20 +1,17 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 const SignIn = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState<{ firstName: string; lastName: string; email: string; password: string }>({
-        firstName: '',
-        lastName: '',
+    const [errors, setErrors] = useState<{ email: string; password: string }>({
         email: '',
         password: '',
     });
@@ -22,11 +19,7 @@ const SignIn = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === 'firstName') {
-            setFirstName(value);
-        } else if (name === 'lastName') {
-            setLastName(value);
-        } else if (name === 'email') {
+        if (name === 'email') {
             setEmail(value);
         } else if (name === 'password') {
             setPassword(value);
@@ -34,18 +27,9 @@ const SignIn = () => {
     };
 
     const validateInputs = () => {
-        let formErrors = { firstName: '', lastName: '', email: '', password: '' };
+        let formErrors = { email: '', password: '' };
         let isValid = true;
 
-        if (!firstName) {
-            formErrors.firstName = 'First name is required';
-            isValid = false;
-        }
-
-        if (!lastName) {
-            formErrors.lastName = 'Last name is required';
-            isValid = false;
-        }
 
         if (!email) {
             formErrors.email = 'Email is required';
@@ -100,34 +84,8 @@ const SignIn = () => {
                     </div>
                 </div>
 
-                <div className='h-[500px] w-[400px] border mx-auto mt-9 customtwo rounded'>
+                <div className='h-[400px] w-[400px] border mx-auto mt-9 customtwo rounded'>
                     <form onSubmit={handleSubmit} className="w-full h-full">
-                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
-                            <label htmlFor="firstName" className='mb-2'>
-                                First Name
-                            </label>
-                            <input
-                                name="firstName"
-                                placeholder='First Name'
-                                className='p-2 border rounded focus:outline-none focus:border-blue-500'
-                                value={firstName}
-                                onChange={handleInputChange}
-                            />
-                            {errors.firstName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.firstName}</p>}
-                        </div>
-                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
-                            <label htmlFor="lastName" className='mb-2'>
-                                Last Name
-                            </label>
-                            <input
-                                name="lastName"
-                                placeholder='Last Name'
-                                className='p-2 border rounded focus:outline-none focus:border-blue-500'
-                                value={lastName}
-                                onChange={handleInputChange}
-                            />
-                            {errors.lastName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.lastName}</p>}
-                        </div>
                         <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
                                 Email
@@ -183,6 +141,11 @@ const SignIn = () => {
                         <button type="submit" className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'>
                             Log in
                         </button>
+
+                        <div className='mt-4 flex justify-center'>
+                            <p>I dont have a account</p>
+                            <Link href="/Signup" className="text-blue-500 ml-1">Sign up</Link>
+                        </div>
                     </form>
                 </div>
             </div>
