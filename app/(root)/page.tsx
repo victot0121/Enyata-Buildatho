@@ -7,8 +7,8 @@ import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 const SignIn = () => {
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -16,11 +16,10 @@ const SignIn = () => {
         firstName: '',
         lastName: '',
         email: '',
-        password: ''
+        password: '',
     });
     const router = useRouter();
 
-    // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === 'firstName') {
@@ -34,7 +33,6 @@ const SignIn = () => {
         }
     };
 
-    // Function to validate form inputs
     const validateInputs = () => {
         let formErrors = { firstName: '', lastName: '', email: '', password: '' };
         let isValid = true;
@@ -43,7 +41,7 @@ const SignIn = () => {
             formErrors.firstName = 'First name is required';
             isValid = false;
         }
-        
+
         if (!lastName) {
             formErrors.lastName = 'Last name is required';
             isValid = false;
@@ -69,18 +67,15 @@ const SignIn = () => {
         return isValid;
     };
 
-    // Function to handle form submission
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateInputs()) {
-            // Proceed with form submission (e.g., call an API)
             router.push('/homePage/dashboard');
         } else {
             alert('Please fill in all required fields');
         }
     };
 
-    // Function to toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -92,7 +87,7 @@ const SignIn = () => {
                     <div className='flex border mx-auto shadow-custom justify-center rounded-lg p-2 max-w-xs'>
                         <Image
                             src={googleLogo}
-                            alt="left side"
+                            alt="Google Logo"
                             className="h-12"
                         />
                         <p className='mt-3 pl-4 text-sm'>Login with Google</p>

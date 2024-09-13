@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from "next/link";
+import Link from 'next/link';
 import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
@@ -21,7 +21,6 @@ const Signup = () => {
     });
     const router = useRouter();
 
-    // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === 'firstName') {
@@ -35,7 +34,6 @@ const Signup = () => {
         }
     };
 
-    // Function to validate form inputs
     const validateInputs = () => {
         let formErrors = { firstName: '', lastName: '', email: '', password: '' };
         let isValid = true;
@@ -70,18 +68,15 @@ const Signup = () => {
         return isValid;
     };
 
-    // Function to handle form submission
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateInputs()) {
-            // Proceed with form submission (e.g., call an API)
             router.push('/homePage/dashboard');
         } else {
             alert('Please fill in all required fields');
         }
     };
 
-    // Function to toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -96,7 +91,7 @@ const Signup = () => {
                             alt="Google Logo"
                             className="h-12"
                         />
-                        <p className='mt-3 pl-4 text-sm'>Login with Google</p>
+                        <p className='mt-3 pl-4 text-sm'>Sign up with Google</p>
                     </div>
 
                     <div className='flex items-center justify-center mt-10'>
@@ -106,10 +101,9 @@ const Signup = () => {
                     </div>
                 </div>
 
-                <div className='h-[590px] w-[400px] border mx-auto mt-9 customtwo rounded pt-5'>
+                <div className='h-[500px] w-[400px] border mx-auto mt-9 customtwo rounded'>
                     <form onSubmit={handleSubmit} className="w-full h-full">
-
-                        <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
+                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="firstName" className='mb-2'>
                                 First Name
                             </label>
@@ -120,7 +114,7 @@ const Signup = () => {
                                 value={firstName}
                                 onChange={handleInputChange}
                             />
-                            {errors.firstName && <p className='text-red-500 text-xs mt-1 mb-4'>{errors.firstName}</p>}
+                            {errors.firstName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.firstName}</p>}
                         </div>
                         <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="lastName" className='mb-2'>
@@ -133,9 +127,8 @@ const Signup = () => {
                                 value={lastName}
                                 onChange={handleInputChange}
                             />
-                            {errors.lastName && <p className='text-red-500 text-xs mt-1 mb-4'>{errors.lastName}</p>}
+                            {errors.lastName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.lastName}</p>}
                         </div>
-
                         <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
                                 Email
@@ -147,7 +140,7 @@ const Signup = () => {
                                 value={email}
                                 onChange={handleInputChange}
                             />
-                            {errors.email && <p className='text-red-500 text-xs mt-1 mb-20'>{errors.email}</p>}
+                            {errors.email && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.email}</p>}
                         </div>
                         <div className='w-[300px] h-[40px] mt-12 mx-auto flex flex-col relative'>
                             <label htmlFor="password" className='mb-2'>
@@ -162,39 +155,35 @@ const Signup = () => {
                                 onChange={handleInputChange}
                             />
                             {/* Toggle password visibility icon */}
-                            <div className='absolute right-2 top-10 cursor-pointer'>
+                            <div className=''>
                                 {showPassword ? (
                                     <HiOutlineEyeOff
+                                        className='absolute right-2 top-10 cursor-pointer'
                                         onClick={togglePasswordVisibility}
                                     />
                                 ) : (
                                     <HiOutlineEye
+                                        className='absolute right-2 top-10 cursor-pointer'
                                         onClick={togglePasswordVisibility}
                                     />
                                 )}
                             </div>
-                            {errors.password && <p className='text-red-500 text-xs mt-1 mb-16'>{errors.password}</p>}
+                            {errors.password && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.password}</p>}
                         </div>
 
-                        <div className='mt-[50px] flex w-full justify-between items-center px-8'>
-                            <div className='flex items-center'>
-                            </div>
-                            <Link href="/">
-                                <div className='text-blue-500 cursor-pointer'>
-                                    I have an account?
-                                </div>
-                            </Link>
-                        </div>
-
-                        {/* Submit button */}
-                        <button type="submit" className='flex border mx-auto bg-[#4169E1] text-white-100 justify-center rounded-lg p-3 w-[350px] mt-6 text-white'>
+                        <button type="submit" className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'>
                             Sign Up
                         </button>
+
+                        <div className='mt-4 flex justify-center'>
+                            <p>Already have an account?</p>
+                            <Link href="/auth/signin" className="text-blue-500 ml-1">Sign In</Link>
+                        </div>
                     </form>
                 </div>
             </div>
         </section>
     );
-}
+};
 
 export default Signup;
