@@ -1,22 +1,25 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 
-const ibmPlexSerif = IBM_Plex_Serif({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-ibm-plex-serif'
-})
+const inter = {
+  fontFamily: 'Inter, sans-serif',
+  src: 'url(/fonts/Inter-Regular.ttf) format("truetype")',
+};
+
+const ibmPlexSerif = {
+  fontFamily: 'IBM Plex Serif, serif',
+  src: 'url(/fonts/IBMPlexSerif-Regular.ttf) format("truetype")',
+};
 
 
 export const metadata: Metadata = {
   title: "FreshtechInnovationsLtd",
   description: "Freshtech Innovations Ltd",
-  icons:{
+  icons: {
     icon: '../assets/Logo.svg'
   }
 };
@@ -28,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${ibmPlexSerif.variable}`}>{children}</body>
+      <body className={`${inter.fontFamily || 'sans-serif'} ${ibmPlexSerif.fontFamily || 'serif'}`}>{children}</body>
     </html>
   );
 }
