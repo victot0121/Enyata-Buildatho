@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from "next/link";
 import googleLogo from '@/assets/googleLogo.svg';
-import { Switch } from "@/components/ui/switch";
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 const Signup = () => {

@@ -7,10 +7,14 @@ import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 const SignIn = () => {
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState<{ email: string; password: string }>({
+    const [errors, setErrors] = useState<{ firstName: string; lastName: string; email: string; password: string }>({
+        firstName: '',
+        lastName: '',
         email: '',
         password: ''
     });
@@ -19,7 +23,11 @@ const SignIn = () => {
     // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === 'email') {
+        if (firstName === 'firstName') {
+            setFirstName(value)
+        } else if (lastName === 'lastName') {
+            setLastName(value)
+        } else if (name === 'email') {
             setEmail(value);
         } else if (name === 'password') {
             setPassword(value);
@@ -28,8 +36,18 @@ const SignIn = () => {
 
     // Function to validate form inputs
     const validateInputs = () => {
-        let formErrors = { email: '', password: '' };
+        let formErrors = { firstName: '', lastName: '', email: '', password: '' };
         let isValid = true;
+
+        if (!firstName) {
+            formErrors.firstName = 'First name is required';
+            isValid = false;
+        }
+
+        if (!lastName) {
+            formErrors.lastName = 'Last name is required';
+            isValid = false;
+        }
 
         if (!email) {
             formErrors.email = 'Email is required';
@@ -89,31 +107,31 @@ const SignIn = () => {
 
                 <div className='h-300 w-[400px] border mx-auto mt-9 customtwo rounded'>
                     <form onSubmit={handleSubmit} className="w-full h-full">
-                    <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
+                        <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
-                                Email
+                                First Name
                             </label>
                             <input
-                                name="email"
-                                placeholder='Email'
+                                name="firstName"
+                                placeholder='First Name'
                                 className='p-2 border rounded focus:outline-none focus:border-blue-500'
-                                value={email}
+                                value={firstName}
                                 onChange={handleInputChange}
                             />
-                            {errors.email && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.email}</p>}
+                            {errors.firstName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.firstName}</p>}
                         </div>
                         <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
-                                Email
+                                Last Name
                             </label>
                             <input
-                                name="email"
-                                placeholder='Email'
+                                name="lastName"
+                                placeholder='Last Name'
                                 className='p-2 border rounded focus:outline-none focus:border-blue-500'
-                                value={email}
+                                value={lastName}
                                 onChange={handleInputChange}
                             />
-                            {errors.email && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.email}</p>}
+                            {errors.lastName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.lastName}</p>}
                         </div>
                         <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
