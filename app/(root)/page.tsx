@@ -23,10 +23,10 @@ const SignIn = () => {
     // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (firstName === 'firstName') {
-            setFirstName(value)
-        } else if (lastName === 'lastName') {
-            setLastName(value)
+        if (name === 'firstName') {
+            setFirstName(value);
+        } else if (name === 'lastName') {
+            setLastName(value);
         } else if (name === 'email') {
             setEmail(value);
         } else if (name === 'password') {
@@ -43,7 +43,7 @@ const SignIn = () => {
             formErrors.firstName = 'First name is required';
             isValid = false;
         }
-
+        
         if (!lastName) {
             formErrors.lastName = 'Last name is required';
             isValid = false;
@@ -76,7 +76,7 @@ const SignIn = () => {
             // Proceed with form submission (e.g., call an API)
             router.push('/homePage/dashboard');
         } else {
-            alert('Please fill in both email and password');
+            alert('Please fill in all required fields');
         }
     };
 
@@ -105,10 +105,10 @@ const SignIn = () => {
                     </div>
                 </div>
 
-                <div className='h-300 w-[400px] border mx-auto mt-9 customtwo rounded'>
+                <div className='h-[600px] w-[400px] border mx-auto mt-9 customtwo rounded'>
                     <form onSubmit={handleSubmit} className="w-full h-full">
-                        <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
-                            <label htmlFor="email" className='mb-2'>
+                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
+                            <label htmlFor="firstName" className='mb-2'>
                                 First Name
                             </label>
                             <input
@@ -120,8 +120,8 @@ const SignIn = () => {
                             />
                             {errors.firstName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.firstName}</p>}
                         </div>
-                        <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
-                            <label htmlFor="email" className='mb-2'>
+                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
+                            <label htmlFor="lastName" className='mb-2'>
                                 Last Name
                             </label>
                             <input
@@ -133,7 +133,7 @@ const SignIn = () => {
                             />
                             {errors.lastName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.lastName}</p>}
                         </div>
-                        <div className='w-[300px] h-[40px] mt-5 mx-auto flex flex-col'>
+                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
                                 Email
                             </label>
