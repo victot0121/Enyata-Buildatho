@@ -1,12 +1,39 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { SidebarLinks } from '@/constants/index';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { TbArrowBack } from "react-icons/tb";
 
 const Sidebar = () => {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const pathname = usePathname();
+    const router = useRouter();
+
+    // Check if the user is logged in by looking for a token in localStorage
+    useEffect(() => {
+        const token = localStorage.getItem('authToken')
+        if (token) {
+            setIsLoggedIn(true)
+        }
+    })
+
+    // Handle Logout Function
+    const handleLogoout = () => {
+        //Clear authentication data (e.g., token) from localStorage
+        localStorage.removeItem('authToken');  // or sessionStorage.removeItem('authToken');
+
+
+        //  Set login state to false
+        setIsLoggedIn(false);
+
+
+        //  Redirect to the login page
+        router.push('/')
+    }
 
     return (
         <div className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between border-r border-gray-200 bg-white pt-8 text-white sm:p-4 xl:p-6 2xl:w-[355px]">
@@ -30,9 +57,15 @@ const Sidebar = () => {
                     );
                 })}
             </nav>
-            <footer className=''>
-                Log Out
-            </footer>
+            {isLoggedIn ? null : (
+                <footer className='p-4'>
+                    {/* Logout button */}
+                    <button className="w-full flex gap-3 text-left p-3 bg-red-500 text-white-100 rounded-lg hover:bg-red-600" onClick={handleLogoout}>
+                        <TbArrowBack className='mt-1' color='white' />
+                        Log Out
+                    </button>
+                </footer>
+            )}
         </div>
     );
 };

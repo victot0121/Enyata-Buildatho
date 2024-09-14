@@ -5,14 +5,17 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
+import { FaSpinner } from 'react-icons/fa'; // Loading spinner icon
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState<{ email: string; password: string }>({
+    const [loading, setLoading] = useState(false); // Loading state
+    const [errors, setErrors] = useState<{ email: string; password: string; general: string }>({
         email: '',
-        password: ''
+        password: '',
+        general: '' // General error message
     });
     const router = useRouter();
 
@@ -28,7 +31,7 @@ const SignIn = () => {
 
     // Function to validate form inputs
     const validateInputs = () => {
-        let formErrors = { email: '', password: '' };
+        let formErrors = { email: '', password: '', general: '' };
         let isValid = true;
 
         if (!email) {
@@ -52,13 +55,33 @@ const SignIn = () => {
     };
 
     // Function to handle form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (validateInputs()) {
-            // Proceed with form submission (e.g., call an API)
-            router.push('/homePage/dashboard');
-        } else {
-            alert('Please fill in both email and password');
+        if (!validateInputs()) return;
+
+        setLoading(true); // Show loading spinner
+        setErrors({ ...errors, general: '' }); // Clear general errors
+
+        try {
+            const response = await fetch('https://agreelink.onrender.com/v1/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                router.push('/homePage/dashboard'); // Navigate to dashboard on success
+            } else {
+                throw new Error(data.message || 'Login failed');
+            }
+        } catch (error) {
+            setErrors({ ...errors, general: error.message });
+        } finally {
+            setLoading(false); // Hide loading spinner
         }
     };
 
@@ -131,6 +154,12 @@ const SignIn = () => {
                             {errors.password && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.password}</p>}
                         </div>
 
+                        {errors.general && (
+                            <div className='text-red-500 text-sm mt-2'>
+                                {errors.general}
+                            </div>
+                        )}
+
                         <div className='mt-[50px] flex w-full justify-between items-center px-8'>
                             <div className='flex items-center'>
                                 <span className='ml-2'>Remember me</span>
@@ -141,8 +170,16 @@ const SignIn = () => {
                         </div>
 
                         {/* Submit button */}
-                        <button type="submit" className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'>
-                            Log in
+                        <button
+                            type="submit"
+                            className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'
+                            disabled={loading} // Disable button when loading
+                        >
+                            {loading ? (
+                                <FaSpinner className="animate-spin mr-2" /> // Show spinner
+                            ) : (
+                                'Log in'
+                            )}
                         </button>
                     </form>
                 </div>

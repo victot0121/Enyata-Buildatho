@@ -6,12 +6,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
+import { PulseLoader } from 'react-spinners';  // Add this for the loading spinner
+
 
 const Signup = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);  // State for loading
+    const [apiError, setApiError] = useState('');  // State for API error message
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({
         firstName: '',
@@ -68,14 +72,42 @@ const Signup = () => {
         return isValid;
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (validateInputs()) {
-            router.push('/homePage/dashboard');
+            setLoading(true);  // Start loading
+
+            try {
+                const response = await fetch('https://agreelink.onrender.com/v1/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email,
+                        password
+                    })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    setApiError(data.message || 'Registration failed');
+                } else {
+                    router.push('/Signin');  // Redirect on success
+                }
+            } catch (error) {
+                setApiError('An error occurred. Please try again.');
+            } finally {
+                setLoading(false);  // Stop loading
+            }
         } else {
             alert('Please fill in all required fields');
         }
     };
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -171,9 +203,20 @@ const Signup = () => {
                             {errors.password && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.password}</p>}
                         </div>
 
-                        <button type="submit" className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'>
-                            Sign Up
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'
+                        >
+                            {loading ? (
+                                <PulseLoader size={12} color={'#fff'} />
+                            ) : (
+                                'Sign Up'
+                            )
+                            }
                         </button>
+
+                        {apiError && <p className='text-red-500 text-center mt-4 mb-4'>{apiError}</p>}
 
                         <div className='mt-4 flex justify-center'>
                             <p>Already have an account?</p>
