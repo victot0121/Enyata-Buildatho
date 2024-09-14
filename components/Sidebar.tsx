@@ -19,7 +19,7 @@ const Sidebar = () => {
         if (token) {
             setIsLoggedIn(true)
         }
-    })
+    },[])
 
     // Handle Logout Function
     const handleLogoout = () => {
