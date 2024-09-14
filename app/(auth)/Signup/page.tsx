@@ -10,16 +10,14 @@ import { PulseLoader } from 'react-spinners';  // Add this for the loading spinn
 
 
 const Signup = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);  // State for loading
     const [apiError, setApiError] = useState('');  // State for API error message
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({
-        firstName: '',
-        lastName: '',
+        userName: '',
         email: '',
         password: ''
     });
@@ -27,10 +25,8 @@ const Signup = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === 'firstName') {
-            setFirstName(value);
-        } else if (name === 'lastName') {
-            setLastName(value);
+        if (name === 'userName') {
+            setUserName(value);
         } else if (name === 'email') {
             setEmail(value);
         } else if (name === 'password') {
@@ -39,16 +35,11 @@ const Signup = () => {
     };
 
     const validateInputs = () => {
-        let formErrors = { firstName: '', lastName: '', email: '', password: '' };
+        let formErrors = { userName: '', email: '', password: '' };
         let isValid = true;
 
-        if (!firstName) {
-            formErrors.firstName = 'First Name is required';
-            isValid = false;
-        }
-
-        if (!lastName) {
-            formErrors.lastName = 'Last Name is required';
+        if (!userName) {
+            formErrors.userName = 'User Name is required';
             isValid = false;
         }
 
@@ -60,11 +51,13 @@ const Signup = () => {
             isValid = false;
         }
 
+        // Check for password complexity: at least one letter, one number, and one special character
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
         if (!password) {
             formErrors.password = 'Password is required';
             isValid = false;
-        } else if (password.length < 6) {
-            formErrors.password = 'Password must be more than 6 characters';
+        } else if (!passwordRegex.test(password)) {
+            formErrors.password = 'Password must be at least 6 characters, contain letters, numbers, and a special character';
             isValid = false;
         }
 
@@ -85,20 +78,25 @@ const Signup = () => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        firstName,
-                        lastName,
+                        userName,
                         email,
                         password
                     })
                 });
 
+                const data = await response.json();
+
                 if (!response.ok) {
-                    const data = await response.json();
-                    setApiError(data.message || 'Registration failed');
+                    console.log('API Error:', data); // Log the entire response
+                    const errorMessage = typeof data === 'object' && data.message ? data.message : 'Registration failed';
+                    setApiError(errorMessage);  // Set a more specific error message
                 } else {
-                    router.push('/');  // Redirect on success
+                    // Redirect on success
+                    router.push('/');
                 }
             } catch (error) {
+                // Log the error to the console for debugging
+                console.error('Signup error:', error);
                 setApiError('An error occurred. Please try again.');
             } finally {
                 setLoading(false);  // Stop loading
@@ -137,29 +135,16 @@ const Signup = () => {
                     <form onSubmit={handleSubmit} className="w-full h-full">
                         <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="firstName" className='mb-2'>
-                                First Name
+                                User Name
                             </label>
                             <input
-                                name="firstName"
-                                placeholder='First Name'
+                                name="userName"
+                                placeholder='user Name'
                                 className='p-2 border rounded focus:outline-none focus:border-blue-500'
-                                value={firstName}
+                                value={userName}
                                 onChange={handleInputChange}
                             />
-                            {errors.firstName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.firstName}</p>}
-                        </div>
-                        <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
-                            <label htmlFor="lastName" className='mb-2'>
-                                Last Name
-                            </label>
-                            <input
-                                name="lastName"
-                                placeholder='Last Name'
-                                className='p-2 border rounded focus:outline-none focus:border-blue-500'
-                                value={lastName}
-                                onChange={handleInputChange}
-                            />
-                            {errors.lastName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.lastName}</p>}
+                            {errors.userName && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.userName}</p>}
                         </div>
                         <div className='w-[300px] h-[40px] mt-9 mx-auto flex flex-col'>
                             <label htmlFor="email" className='mb-2'>
@@ -200,13 +185,14 @@ const Signup = () => {
                                     />
                                 )}
                             </div>
-                            {errors.password && <p className='text-red-500 text-xs mt-1 mb-10'>{errors.password}</p>}
+                            {errors.password && <p className='text-red-500 text-xs mt-1 mb-36'>{errors.password}</p>}
                         </div>
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'
+                            className={`flex border mx-auto  justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100  ${loading ? 'bg-gray-500' : 'bg-[#4169E1]'
+                                }`}
                         >
                             {loading ? (
                                 <PulseLoader size={12} color={'#fff'} />
@@ -216,7 +202,7 @@ const Signup = () => {
                             }
                         </button>
 
-                        {apiError && <p className='text-red-500 text-center mt-4 mb-4'>{apiError}</p>}
+                        {apiError && <p className='text-red-500 text-center mt-4 mb-4'>{typeof apiError === 'string' ? apiError : 'An error occurred'}</p>}
 
                         <div className='mt-4 flex justify-center'>
                             <p>Already have an account?</p>

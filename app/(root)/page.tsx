@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
+import { TbArrowBack } from "react-icons/tb";
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
@@ -15,6 +16,8 @@ const SignIn = () => {
         email: '',
         password: '',
     });
+    const [apiError, setApiError] = useState<string | null>(null); // For API errors
+    const [loading, setLoading] = useState(false); // Loading state
     const router = useRouter();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +33,6 @@ const SignIn = () => {
         let formErrors = { email: '', password: '' };
         let isValid = true;
 
-
         if (!email) {
             formErrors.email = 'Email is required';
             isValid = false;
@@ -39,11 +41,13 @@ const SignIn = () => {
             isValid = false;
         }
 
+        // Check for password complexity: at least one letter, one number, and one special character
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
         if (!password) {
             formErrors.password = 'Password is required';
             isValid = false;
-        } else if (password.length < 6) {
-            formErrors.password = 'Password must be more than 6 characters';
+        } else if (!passwordRegex.test(password)) {
+            formErrors.password = 'Password must be at least 6 characters, contain letters, numbers, and a special character';
             isValid = false;
         }
 
@@ -51,10 +55,40 @@ const SignIn = () => {
         return isValid;
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (validateInputs()) {
-            router.push('/homePage/dashboard');
+            setLoading(true);  // Start loading
+            setApiError(null);  // Clear any previous errors
+
+            try {
+                const response = await fetch('https://agreelink.onrender.com/v1/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Handle error from the API
+                    const errorMessage = data?.message || 'Login failed';
+                    setApiError(errorMessage);
+                } else {
+                    // Redirect to the dashboard on successful login
+                    router.push('/homePage/dashboard');
+                }
+            } catch (error) {
+                setApiError('An error occurred. Please try again.');
+            } finally {
+                setLoading(false);  // Stop loading
+            }
         } else {
             alert('Please fill in all required fields');
         }
@@ -138,12 +172,22 @@ const SignIn = () => {
                         </div>
 
                         {/* Submit button */}
-                        <button type="submit" className='flex border mx-auto bg-[#4169E1] justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100'>
-                            Log in
+                        <button
+                            type="submit"
+                            className={`flex border mx-auto justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100 ${loading ? 'bg-gray-500' : 'bg-[#4169E1]'
+                                }`}
+                            disabled={loading}
+                        >
+                            {loading ? 'Logging in...' : 'Log in'}
                         </button>
 
+                        {/* API Error */}
+                        {apiError && (
+                            <p className="text-red-500 text-center mt-4 mb-4">{apiError}</p>
+                        )}
+
                         <div className='mt-4 flex justify-center'>
-                            <p>I dont have a account</p>
+                            <p>I don't have an account</p>
                             <Link href="/Signup" className="text-blue-500 ml-1">Sign up</Link>
                         </div>
                     </form>

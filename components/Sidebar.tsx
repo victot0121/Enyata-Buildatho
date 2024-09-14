@@ -9,7 +9,6 @@ import { TbArrowBack } from "react-icons/tb";
 const Sidebar = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     const pathname = usePathname();
     const router = useRouter();
 
@@ -23,13 +22,11 @@ const Sidebar = () => {
 
     // Handle Logout Function
     const handleLogoout = () => {
-        //Clear authentication data (e.g., token) from localStorage
-        localStorage.removeItem('authToken');  // or sessionStorage.removeItem('authToken');
-
+        //Clear authentication data from localStorage
+        localStorage.removeItem('authToken');  
 
         //  Set login state to false
         setIsLoggedIn(false);
-
 
         //  Redirect to the login page
         router.push('/')
@@ -60,7 +57,7 @@ const Sidebar = () => {
             {isLoggedIn ? null : (
                 <footer className='p-4'>
                     {/* Logout button */}
-                    <button className="w-full flex gap-3 text-left p-3 bg-red-500 text-white-100 rounded-lg hover:bg-red-600" onClick={handleLogoout}>
+                    <button className="w-full flex gap-3 text-left p-3 bg-blue-600 text-white-100 rounded-lg hover:bg-red-600" onClick={handleLogoout}>
                         <TbArrowBack className='mt-1' color='white' />
                         Log Out
                     </button>
