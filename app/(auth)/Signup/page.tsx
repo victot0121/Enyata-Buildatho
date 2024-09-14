@@ -96,7 +96,7 @@ const Signup = () => {
                     const data = await response.json();
                     setApiError(data.message || 'Registration failed');
                 } else {
-                    router.push('/Signin');  // Redirect on success
+                    router.push('/');  // Redirect on success
                 }
             } catch (error) {
                 setApiError('An error occurred. Please try again.');
