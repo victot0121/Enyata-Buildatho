@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+
+
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 import { RiDeleteBin7Line } from "react-icons/ri";
@@ -8,55 +10,52 @@ import { BiSolidEdit } from "react-icons/bi";
 const Dashboard = () => {
     const router = useRouter();
 
-    const [proposals, setProposals] = useState([
-        { id: 1, title: 'Proposal 1', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 2, title: 'Proposal 2', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 3, title: 'Proposal 3', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 4, title: 'Proposal 4', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 5, title: 'Proposal 5', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 6, title: 'Proposal 6', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 7, title: 'Proposal 7', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-        { id: 8, title: 'Proposal 8', p: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.' },
-    ]);
-    
-
+    const [proposals, setProposals] = useState<any[]>([]);
     const [visibleProposals, setVisibleProposals] = useState(3);
     const [editingProposalId, setEditingProposalId] = useState<number | null>(null);
     const [editedTitle, setEditedTitle] = useState("");
+
+    // Fetch proposals from localStorage on component mount
+    useEffect(() => {
+        const savedProposals = JSON.parse(localStorage.getItem("proposals") || "[]");
+        setProposals(savedProposals);
+    }, []);
 
     // Handle "See More" button click
     const handleSeeMore = () => {
         if (visibleProposals < proposals.length) {
             setVisibleProposals((prev) => prev + 3); // Show 3 more proposals
         } else {
-            router.push("/proposals"); // Navigate to the proposals page if all are displayed
+            router.push("/Proposals");
         }
     };
 
     // Handle delete functionality
     const handleDelete = (id: number) => {
-        setProposals(proposals.filter((proposal) => proposal.id !== id));
+        const updatedProposals = proposals.filter((proposal) => proposal.id !== id);
+        setProposals(updatedProposals);
+        localStorage.setItem("proposals", JSON.stringify(updatedProposals)); // Update localStorage
     };
 
     // Handle edit functionality
     const handleEdit = (proposal: any) => {
         setEditingProposalId(proposal.id);
-        setEditedTitle(proposal.title); // Set the initial value to the current proposal title
+        setEditedTitle(proposal.title);
     };
 
     // Handle title save functionality
     const handleSave = (id: number) => {
-        setProposals((prevProposals) =>
-            prevProposals.map((proposal) =>
-                proposal.id === id ? { ...proposal, title: editedTitle } : proposal
-            )
+        const updatedProposals = proposals.map((proposal) =>
+            proposal.id === id ? { ...proposal, title: editedTitle } : proposal
         );
+        setProposals(updatedProposals);
+        localStorage.setItem("proposals", JSON.stringify(updatedProposals)); // Update localStorage
         setEditingProposalId(null); // Exit edit mode
     };
 
     // Handle title click to navigate to a detailed page
     const handleTitleClick = (id: number) => {
-        router.push(`/proposals/${id}`); // Navigate to /proposals/[id]
+        router.push(`/ProposalDetail/${id}`);
     };
 
     return (
@@ -72,7 +71,6 @@ const Dashboard = () => {
                             className="flex justify-between bg-white p-4 rounded-lg shadow-md"
                         >
                             {editingProposalId === proposal.id ? (
-                                // Edit Mode
                                 <input
                                     type="text"
                                     className="text-lg font-semibold border p-2 rounded"
@@ -80,7 +78,6 @@ const Dashboard = () => {
                                     onChange={(e) => setEditedTitle(e.target.value)}
                                 />
                             ) : (
-                                // View Mode: Clickable title to navigate to detail page
                                 <h2
                                     className="text-lg font-semibold cursor-pointer hover:text-blue-500"
                                     onClick={() => handleTitleClick(proposal.id)}
@@ -121,7 +118,11 @@ const Dashboard = () => {
                     </button>
                 </div>
 
-                <button className="fixed bottom-6 right-6 text-white bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none">
+                {/* Floating "+" button */}
+                <button
+                    className="fixed bottom-6 right-6 text-white bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
+                    onClick={() => router.push("/createProposal")} // Navigate to the create proposal page
+                >
                     +
                 </button>
             </div>
