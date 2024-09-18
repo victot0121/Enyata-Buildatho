@@ -2,9 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-
-const createProposal = () => {
-
+const CreateProposal = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -12,22 +10,22 @@ const createProposal = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    //save the proposal to localStorage for simplicity
-    const existingProposals = JSON.parse(localStorage.getItem("proposals") || "[]")
+    // Save the proposal to localStorage for simplicity
+    const existingProposals = JSON.parse(localStorage.getItem("proposals") || "[]");
 
     const newProposal = {
       id: existingProposals.length + 1, // Generate a simple ID
       title,
       description,
-    }
+    };
 
-    //save the new proposal
+    // Save the new proposal
     const updatedProposals = [...existingProposals, newProposal];
     localStorage.setItem("proposals", JSON.stringify(updatedProposals));
 
     // Redirect back to the dashboard
     router.push("/homePage/dashboard");
-  }
+  };
 
   return (
     <div className="max-w-lg mt-[60px] mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -62,13 +60,12 @@ const createProposal = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white-100 p-2 rounded hover:bg-blue-600 transition-colors"
-          onClick={() => router.push("/homePage/dashboard")}
         >
           Save Proposal
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default createProposal
+export default CreateProposal;
