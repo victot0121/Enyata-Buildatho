@@ -187,7 +187,7 @@ const SignIn = () => {
                         )}
 
                         <div className='mt-4 flex justify-center'>
-                            <p>I don't have an account</p>
+                            <p>I don&apos;t have an account</p>
                             <Link href="/Signup" className="text-blue-500 ml-1">Sign up</Link>
                         </div>
                     </form>
