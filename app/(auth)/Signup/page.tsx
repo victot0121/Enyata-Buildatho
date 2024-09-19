@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import GoogleButton from '@/components/GoogleButton';
 import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import { PulseLoader } from 'react-spinners';  // Add this for the loading spinner
@@ -115,15 +116,8 @@ const Signup = () => {
         <section className="py-6 sm:py-10 lg:py-16">
             <div className="px-4 mx-auto max-w-4xl sm:px-6 lg:px-8">
                 <div className="max-w-md mx-auto text-center">
-                    <div className='flex border mx-auto shadow-custom justify-center rounded-lg p-2 max-w-xs'>
-                        <Image
-                            src={googleLogo}
-                            alt="Google Logo"
-                            className="h-12"
-                        />
-                        <p className='mt-3 pl-4 text-sm'>Sign up with Google</p>
-                    </div>
-
+                   
+                <GoogleButton/>
                     <div className='flex items-center justify-center mt-10'>
                         <div className='h-[1px] w-32 bg-black-2'></div>
                         <p className='px-4'>Or continue with</p>

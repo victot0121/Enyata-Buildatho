@@ -120,7 +120,7 @@ const Dashboard = () => {
 
                 {/* Floating "+" button */}
                 <button
-                    className="fixed bottom-6 right-6 text-white bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
+                    className="fixed bottom-6 right-6 text-white-100 bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
                     onClick={() => router.push("/createProposal")} // Navigate to the create proposal page
                 >
                     +
