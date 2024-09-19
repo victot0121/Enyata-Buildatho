@@ -14,42 +14,32 @@ type User = {
 };
 
 const GoogleButton = () => {
-    const { login, authenticated, user } = usePrivy() as {
-        login: () => Promise<void>;
-        authenticated: boolean;
-        user?: User;
-    };
-
+    const { login, authenticated, user } = usePrivy();
     const router = useRouter();
 
-    // Function to handle login with Google
-    const handleLogin = () => {
+    const handleLogin = async () => {
         // Prevent login if the user is already authenticated
         if (authenticated) {
             alert("You are already logged in.");
             return;
         }
 
-        login()
-            .then(() => {
-                router.push('/homePage/dashboard');
-            })
-            .catch((error) => {
-                alert("Login failed");
-            });
+        try {
+            await login(); // Ensure login is awaited
+            router.push('/homePage/dashboard'); // Route after successful login
+        } catch (error) {
+            alert("Login failed");
+            console.error(error);
+        }
     };
+
 
     // Handle redirect when authenticated and user details are available
     useEffect(() => {
-        try {
-            if (authenticated && user?.email) {
-                alert("Welcome!");
-            }
-        } catch (error) {
-            console.error("Error during redirection:", error);
+        if (authenticated && user?.email) {
+            alert("Welcome!");
         }
     }, [authenticated, user, router]);
-
 
     return (
         <div
