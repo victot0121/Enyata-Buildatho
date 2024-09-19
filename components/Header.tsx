@@ -2,38 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 
-// Define types for the user object
-type User = {
-    id?: string;
-    createdAt?: Date;
-    linkedAccounts?: Array<{
-        provider: string;
-        name?: string;
-        email?: string;
-        imageUrl?: string;
-    }>;
-    email?: string;
-    phone?: string;
-    [key: string]: any;
-};
-
 const Header = () => {
-    const { authenticated, user } = usePrivy() as {
-        authenticated: boolean;
-        user?: User;
-    };
+    const { authenticated, user } = usePrivy();
 
     const [currentTime, setCurrentTime] = useState(new Date());
 
     // Update time every second
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-        return () => clearInterval(timer); // Clear interval on component unmount
+        return () => clearInterval(timer);
     }, []);
 
-
-    // Get user name, email, and image from linked accounts (like Google)
-    const userName = user?.linkedAccounts?.[0]?.name || 'User';
+    // Safely access the name from linked accounts, if available
+    const linkedAccount = user?.linkedAccounts?.[0];
+    const userName = linkedAccount && 'name' in linkedAccount ? linkedAccount.name : 'User';
 
     return (
         <header className="pb-6 bg-white lg:pb-0">
