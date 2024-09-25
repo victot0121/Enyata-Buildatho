@@ -116,8 +116,8 @@ const Signup = () => {
         <section className="py-6 sm:py-10 lg:py-16">
             <div className="px-4 mx-auto max-w-4xl sm:px-6 lg:px-8">
                 <div className="max-w-md mx-auto text-center">
-                   
-                <GoogleButton/>
+
+                    <GoogleButton />
                     <div className='flex items-center justify-center mt-10'>
                         <div className='h-[1px] w-32 bg-black-2'></div>
                         <p className='px-4'>Or continue with</p>

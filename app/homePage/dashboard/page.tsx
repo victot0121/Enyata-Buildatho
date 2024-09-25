@@ -62,7 +62,7 @@ const Dashboard = () => {
         <>
             <Header />
             <div className="relative p-6">
-                <h1 className="text-xl font-bold mb-4">My Proposals</h1>
+                <h1 className="text-sm md:text-xl font-bold mb-4">My Proposals</h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {proposals.slice(0, visibleProposals).map((proposal) => (
@@ -101,7 +101,7 @@ const Dashboard = () => {
                                     />
                                 )}
                                 <RiDeleteBin7Line
-                                    className="cursor-pointer hover:text-red-500"
+                                    className="text-sm md:text-xl cursor-pointer hover:text-red-500"
                                     onClick={() => handleDelete(proposal.id)}
                                 />
                             </div>
@@ -112,7 +112,7 @@ const Dashboard = () => {
                 <div className="text-right mt-4">
                     <button
                         onClick={handleSeeMore}
-                        className="text-blue-500 hover:underline"
+                        className="text-sm md:text-xl text-blue-500 hover:underline"
                     >
                         {visibleProposals < proposals.length ? "See More" : "Go to Proposals"}
                     </button>
@@ -120,7 +120,7 @@ const Dashboard = () => {
 
                 {/* Floating "+" button */}
                 <button
-                    className="fixed bottom-6 right-6 text-white-100 bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
+                    className="fixed text-sm md:text-xl bottom-6 right-6 text-white-100 bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
                     onClick={() => router.push("/createProposal")} // Navigate to the create proposal page
                 >
                     +
