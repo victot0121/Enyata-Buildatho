@@ -73,7 +73,7 @@ const Signup = () => {
             setLoading(true);  // Start loading
 
             try {
-                const response = await fetch('https://agreelink.onrender.com/v1/api/register', {
+                const response = await fetch('https://agreelink.onrender.com/v1/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
