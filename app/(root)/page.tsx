@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import GoogleButton from '@/components/GoogleButton';
+import axios from 'axios';
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
@@ -16,9 +17,9 @@ const SignIn = () => {
     });
     const [apiError, setApiError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [apiUser, setApiUser] = useState<{ username?: string } | null>(null); // Store API user info
     const router = useRouter();
 
-    // Input handler with trimming
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === 'email') {
@@ -28,7 +29,6 @@ const SignIn = () => {
         }
     };
 
-    // Validation for inputs
     const validateInputs = () => {
         const newErrors = { email: '', password: '' };
         let isValid = true;
@@ -41,14 +41,13 @@ const SignIn = () => {
             isValid = false;
         }
 
-
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,30}$/;
 
         if (!password) {
             newErrors.password = 'Password is required';
             isValid = false;
         } else if (!passwordRegex.test(password)) {
-            newErrors.password = 'Password must be at least 6 characters, contain letters, numbers, and a special character';
+            newErrors.password = 'Password must be at least 6 characters and contain letters and numbers';
             isValid = false;
         }
 
@@ -56,7 +55,6 @@ const SignIn = () => {
         return isValid;
     };
 
-    // Form submission handler
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -66,33 +64,33 @@ const SignIn = () => {
         setApiError(null);
 
         try {
-            const response = await fetch('https://agreelink.onrender.com/v1/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
+            const response = await axios.post('https://agreelink.onrender.com/v1/api/auth/login', {
+                email,
+                password,
             });
 
-            const data = await response.json();
+            const data = response.data;
+            console.log(data); // Log the response for debugging
 
-            if (!response.ok) {
-                const errorMessage = data?.message || 'Login failed. Please try again.';
-                setApiError(errorMessage);
-            } else {
-                router.push('/homePage/dashboard');
+            // If the login is successful, response.status will be 200
+            if (response.status === 200) {
+                setApiUser(data.data.user); // Set the API user details
+                router.push('/homePage/dashboard'); // Navigate to the dashboard
             }
         } catch (error) {
-            setApiError('An unexpected error occurred. Please try again later.');
+            if (axios.isAxiosError(error) && error.response) {
+                // Handle API error
+                const errorMessage = error.response.data?.message || 'Login failed. Please try again.';
+                setApiError(errorMessage);
+            } else {
+                // Handle any unexpected errors
+                setApiError('An unexpected error occurred. Please try again later.');
+            }
         } finally {
             setLoading(false);
         }
     };
 
-    // Toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -144,17 +142,9 @@ const SignIn = () => {
                             {errors.password && <p className="text-red-500 text-xs mt-1 mb-10">{errors.password}</p>}
                         </div>
 
-                        <div className="mt-[50px] flex w-full justify-between items-center px-8">
-                            <div className="flex items-center">
-                                <input type="checkbox" id="rememberMe" />
-                                <label htmlFor="rememberMe" className="ml-2">Remember me</label>
-                            </div>
-                            <div className="text-red-400 cursor-pointer">Forget password</div>
-                        </div>
-
                         <button
                             type="submit"
-                            className={`flex border mx-auto justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100 ${loading ? 'bg-gray-500' : 'bg-[#4169E1]'} `}
+                            className={`flex border mx-auto justify-center rounded-lg p-3 w-[350px] mt-[80px] text-white-100 ${loading ? 'bg-gray-500' : 'bg-[#4169E1]'}`}
                             disabled={loading}
                         >
                             {loading ? 'Logging in...' : 'Log in'}

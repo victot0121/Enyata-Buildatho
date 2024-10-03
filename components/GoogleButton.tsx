@@ -28,7 +28,7 @@ const GoogleButton = () => {
             await login(); // Ensure login is awaited
             router.push('/homePage/dashboard'); // Route after successful login
         } catch (error) {
-            alert("Login failed");
+            alert("Google Login failed");
             console.error(error);
         }
     };
@@ -37,7 +37,7 @@ const GoogleButton = () => {
     // Handle redirect when authenticated and user details are available
     useEffect(() => {
         if (authenticated && user?.email) {
-            alert("Welcome!");
+            alert("Google login successful!");
         }
     }, [authenticated, user, router]);
 

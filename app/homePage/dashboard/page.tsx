@@ -63,7 +63,6 @@ const Dashboard = () => {
             <Header />
             <div className="relative p-6">
                 <h1 className="text-sm md:text-xl font-bold mb-4">My Proposals</h1>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {proposals.slice(0, visibleProposals).map((proposal) => (
                         <div
@@ -118,10 +117,9 @@ const Dashboard = () => {
                     </button>
                 </div>
 
-                {/* Floating "+" button */}
                 <button
                     className="fixed text-sm md:text-xl bottom-6 right-6 text-white-100 bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
-                    onClick={() => router.push("/createProposal")} // Navigate to the create proposal page
+                    onClick={() => router.push("/createProposal")}
                 >
                     +
                 </button>
