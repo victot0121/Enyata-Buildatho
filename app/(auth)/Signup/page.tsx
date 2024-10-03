@@ -1,24 +1,44 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useReducer, useState } from 'react';
-import axios from 'axios';  // Import axios
-import Image from 'next/image';
+import React, { useReducer } from 'react';
+import axios from 'axios'; // Import axios
 import Link from 'next/link';
 import GoogleButton from '@/components/GoogleButton';
-import googleLogo from '@/assets/googleLogo.svg';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import { PulseLoader } from 'react-spinners';
 
+// Define the state type for the form
+interface FormState {
+    username: string;
+    email: string;
+    password: string;
+    loading: boolean;
+    apiError: string;
+    errors: {
+        username: string;
+        email: string;
+        password: string;
+    };
+    showPassword: boolean;
+}
+
+// Define action types
+interface Action {
+    type: string;
+    field?: string;
+    payload?: any;
+}
+
 // Define initial state for the form
-const initialState = {
-    username: '',  // Changed from userName to username
+const initialState: FormState = {
+    username: '',
     email: '',
     password: '',
     loading: false,
     apiError: '',
     errors: {
-        username: '',  // Updated for consistency
+        username: '',
         email: '',
         password: ''
     },
@@ -36,13 +56,13 @@ const actionTypes = {
 };
 
 // Reducer function to manage form state
-const reducer = (state, action) => {
+const reducer = (state: FormState, action: Action): FormState => {
     switch (action.type) {
         case actionTypes.SET_FIELD:
             return {
                 ...state,
-                [action.field]: action.payload,
-                errors: { ...state.errors, [action.field]: '' }  // Clear error when input changes
+                [action.field!]: action.payload,
+                errors: { ...state.errors, [action.field!]: '' }
             };
         case actionTypes.SET_LOADING:
             return { ...state, loading: action.payload };
@@ -87,14 +107,13 @@ const Signup = () => {
             isValid = false;
         }
 
-        // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,30}$/;
 
         if (!state.password) {
             formErrors.password = 'Password is required';
             isValid = false;
         } else if (!passwordRegex.test(state.password)) {
-            formErrors.password = 'Password must be at least 6 characters, contain letters, numbers, and a special character';
+            formErrors.password = 'Password must be at least 6 characters and contain letters and numbers';
             isValid = false;
         }
 
@@ -111,17 +130,16 @@ const Signup = () => {
 
             try {
                 const { data } = await axios.post('https://agreelink.onrender.com/v1/api/auth/register', {
-                    username: state.username,  // Ensure field name matches API
+                    username: state.username,
                     email: state.email,
                     password: state.password
                 });
 
                 // Handle success and redirect
-                console.log(data);  // Log success data
+                console.log(data); // Log success data
                 router.push('/');
             } catch (error) {
                 // Log the API error for debugging
-                console.error(error.response?.data);
                 const errorMessage = axios.isAxiosError(error)
                     ? error.response?.data?.message || 'Registration failed'
                     : 'An error occurred. Please try again.';
@@ -208,7 +226,7 @@ const Signup = () => {
                         <button
                             type="submit"
                             disabled={state.loading}
-                            className={`flex border mx-auto justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100  ${state.loading ? 'bg-gray-500' : 'bg-[#4169E1]'}`}
+                            className={`flex border mx-auto justify-center rounded-lg p-3 w-[350px] mt-6 text-white-100 ${state.loading ? 'bg-gray-500' : 'bg-[#4169E1]'}`}
                         >
                             {state.loading ? (
                                 <PulseLoader size={12} color={'#fff'} />
