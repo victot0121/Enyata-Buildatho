@@ -14,22 +14,22 @@ declare type User = {
   dateOfBirth: string;
   ssn: string;
 };
-  
-  
-  declare interface SiderbarProps {
-    user: User;
-  }
-
-  
-  declare interface HeaderBoxProps {
-    type?: "title" | "greeting";
-    title: string;
-    subtext: string;
-    user?: string;
-  }  
 
 
-  declare interface LogoHeader {
-     back: string,
-     signInButton: string,
-  }
+declare interface SiderbarProps {
+  user: User;
+}
+
+
+declare interface HeaderBoxProps {
+  type?: "title" | "greeting";
+  title: string;
+  subtext: string;
+  user?: string;
+}
+
+
+declare interface LogoHeader {
+  back: string,
+  signInButton: string,
+}
